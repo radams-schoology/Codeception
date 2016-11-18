@@ -149,7 +149,9 @@ class SuiteManager
 
     public function run(PHPUnit\Runner $runner, \PHPUnit_Framework_TestResult $result, $options)
     {
+        codecept_debug('Dispatching suite before');
         $this->dispatcher->dispatch(Events::SUITE_BEFORE, new Event\SuiteEvent($this->suite, $result, $this->settings));
+        codecept_debug('Finished dispatching suite before');
         $runner->doEnhancedRun($this->suite, $result, $options);
         $this->dispatcher->dispatch(Events::SUITE_AFTER, new Event\SuiteEvent($this->suite, $result, $this->settings));
     }

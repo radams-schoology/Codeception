@@ -4,6 +4,7 @@ namespace Codeception\Subscriber;
 use Codeception\Event\SuiteEvent;
 use Codeception\Events;
 use Codeception\Exception\ConfigurationException;
+use Codeception\Util\Debug;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class Bootstrap implements EventSubscriberInterface
@@ -16,6 +17,7 @@ class Bootstrap implements EventSubscriberInterface
 
     public function loadBootstrap(SuiteEvent $e)
     {
+        codecept_debug('Loading Bootstrap');
         $settings = $e->getSettings();
 
         if (!isset($settings['bootstrap'])) {
@@ -32,5 +34,6 @@ class Bootstrap implements EventSubscriberInterface
         }
 
         require_once $bootstrap;
+        codecept_debug('Completed load bootstrap');
     }
 }

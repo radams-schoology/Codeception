@@ -5,6 +5,7 @@ use Codeception\Configuration;
 use Codeception\Event\SuiteEvent;
 use Codeception\Events;
 use Codeception\Lib\Generator\Actions;
+use Codeception\Util\Debug;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AutoRebuild implements EventSubscriberInterface
@@ -26,6 +27,7 @@ class AutoRebuild implements EventSubscriberInterface
         if (!file_exists($actorActionsFile)) {
             codecept_debug("Generating {$settings['class_name']}Actions...");
             $this->generateActorActions($actorActionsFile, $settings);
+            codecept_debug('Completed generateActorActions');
             return;
         }
         

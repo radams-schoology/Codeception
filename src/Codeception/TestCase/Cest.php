@@ -12,6 +12,7 @@ use Codeception\TestCase\Interfaces\Configurable;
 use Codeception\TestCase\Shared\Actor;
 use Codeception\TestCase\Shared\Dependencies;
 use Codeception\TestCase\Shared\ScenarioPrint;
+use Codeception\Util\Debug;
 
 class Cest extends CodeceptionTestCase implements
     ScenarioDriven,
@@ -38,12 +39,14 @@ class Cest extends CodeceptionTestCase implements
 
     public function preload()
     {
+        codecept_debug('Cest->preload()');
         $this->scenario->setFeature($this->getSpecFromMethod());
         $code = $this->getRawBody();
         $this->parser->parseFeature($code);
         $this->parser->attachMetadata(Annotation::forMethod($this->testClassInstance, $this->testMethod)->raw());
         $this->di->injectDependencies($this->testClassInstance);
         $this->fire(Events::TEST_PARSED, new TestEvent($this));
+        codecept_debug('Test Parsed Being Fired');
     }
 
     public function getRawBody()
@@ -59,10 +62,14 @@ class Cest extends CodeceptionTestCase implements
     {
         $I = $this->makeIObject();
 
+        codecept_debug('Prepare Actor for Test');
         $this->prepareActorForTest();
+        codecept_debug('Actor is prepared');
         try {
             $this->executeHook($I, 'before');
+            codecept_debug('Completed before hook');
             $this->executeBeforeMethods($this->testMethod, $I);
+            codecept_debug('Executed before method function calls');
             $this->executeTestMethod($I);
             $this->executeAfterMethods($this->testMethod, $I);
             $this->executeHook($I, 'after');
@@ -109,8 +116,10 @@ class Cest extends CodeceptionTestCase implements
 
     protected function makeIObject()
     {
+        codecept_debug('Making $I object');
         $className = '\\' . $this->actor;
         $I = new $className($this->scenario);
+        codecept_debug('Able to new up an instance of the actor');
         $spec = $this->getSpecFromMethod();
 
         if ($spec) {

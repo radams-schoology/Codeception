@@ -4,6 +4,7 @@ namespace Codeception\Lib\Generator;
 use Codeception\Configuration;
 use Codeception\Lib\Di;
 use Codeception\Lib\ModuleContainer;
+use Codeception\Util\Debug;
 use Codeception\Util\Template;
 
 class Actor
@@ -43,7 +44,9 @@ EOF;
 
         $modules = Configuration::modules($this->settings);
         foreach ($modules as $moduleName) {
+            codecept_debug('Constructing actor ' . $moduleName);
             $this->moduleContainer->create($moduleName);
+            codecept_debug('Constructed actor ' . $moduleName);
         }
 
         $this->modules = $this->moduleContainer->all();

@@ -2,6 +2,7 @@
 namespace Codeception;
 
 use Codeception\Exception\ConfigurationException;
+use Codeception\Util\Debug;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -111,6 +112,7 @@ class Codecept
                 ? $config['extensions']['config'][$extensionClass]
                 : [];
 
+            codecept_debug('Newing up extension: ' . $extensionClass);
             $extension = new $extensionClass($extensionConfig, $options);
             if (!$extension instanceof EventSubscriberInterface) {
                 throw new ConfigurationException(
@@ -200,6 +202,7 @@ class Codecept
         $suiteManager = new SuiteManager($this->dispatcher, $suite, $settings);
         $suiteManager->initialize();
         $suiteManager->loadTests($test);
+        codecept_debug('Begin suiteManager->run');
         $suiteManager->run($this->runner, $this->result, $this->options);
         return $this->result;
     }

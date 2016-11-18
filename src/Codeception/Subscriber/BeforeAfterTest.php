@@ -4,6 +4,7 @@ namespace Codeception\Subscriber;
 use Codeception\Event\SuiteEvent;
 use Codeception\Events;
 use Codeception\TestCase;
+use Codeception\Util\Debug;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BeforeAfterTest implements EventSubscriberInterface
@@ -26,7 +27,9 @@ class BeforeAfterTest implements EventSubscriberInterface
             $testClass = get_class($test);
             $this->hooks[$testClass] = \PHPUnit_Util_Test::getHookMethods($testClass);
         }
+        codecept_debug('beforeClass beforeHooks');
         $this->runHooks('beforeClass');
+        codecept_debug('beforeClass afterHooks');
     }
 
 
@@ -40,6 +43,7 @@ class BeforeAfterTest implements EventSubscriberInterface
         foreach ($this->hooks as $className => $hook) {
             foreach ($hook[$hookName] as $method) {
                 if (is_callable([$className, $method])) {
+                    codecept_debug('calling function ' . $method . ' in class ' . $className);
                     call_user_func([$className, $method]);
                 }
             }
